@@ -246,17 +246,6 @@ The application retrieves the relevant parts of the transcript and uses Gemini t
 
 ---
 
-## 📸 Screenshots
-
-### 🎥 Video Loaded
-
-![Video Loaded](images/home2.png)
-
-### 🤖 Question Answering
-
-![Question Answering](images/home3.png)
-
----
 
 ## 🔍 RAG Implementation
 
