@@ -1,8 +1,19 @@
 # 🎥 YouTube Video Q&A — RAG Application
 
-A text-based **YouTube Video Question Answering** application built with **Python, Flask, LangChain, Gemini, FAISS, and YouTube Transcript API**.
+A **Retrieval-Augmented Generation (RAG)** based YouTube Video Question Answering application built with **Python, Flask, LangChain, Gemini, FAISS, and YouTube Transcript API**.
 
-The application fetches a YouTube video's transcript, converts it into searchable vector embeddings, and allows users to ask questions about the video. The AI answers questions using the relevant information retrieved from the video's transcript.
+The application fetches a YouTube video's transcript, splits it into smaller chunks, converts the chunks into vector embeddings, and stores them in FAISS. When a user asks a question, the application retrieves the most relevant transcript chunks and provides them as context to Gemini to generate an answer.
+
+This allows users to ask questions about long YouTube videos and receive answers based on the video's transcript.
+
+---
+
+## 📸 Home Pages
+
+![Home Page](images/home1.png)
+![Home Page](images/home2.png)
+![Home Page](images/home3.png)
+
 
 ---
 
@@ -11,38 +22,45 @@ The application fetches a YouTube video's transcript, converts it into searchabl
 - 🔗 Enter a YouTube video URL
 - 📝 Automatically fetch the video's transcript
 - 🌍 Supports available transcripts/languages
-- ✂️ Splits the transcript into smaller chunks
-- 🧠 Generates embeddings using Gemini
-- 🔎 Uses FAISS for similarity search
-- 🤖 Uses Gemini 2.5 Flash to generate answers
+- ✂️ Split transcripts into smaller chunks
+- 🧠 Generate embeddings using Gemini
+- 🔎 Semantic search using FAISS
+- 🤖 Generate answers using Gemini 2.5 Flash
 - 💬 Ask multiple questions about the loaded video
-- 🎯 Answers are based only on the video transcript
+- 🎯 Generate answers based on the video transcript
 - 🌐 Flask backend with a web-based frontend
-- ⚡ Fast retrieval using a vector database
+- ⚡ Fast information retrieval using vector search
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Backend
+
 - Python
 - Flask
 - Flask-CORS
 
 ### AI / LLM
+
 - Google Gemini
 - `gemini-2.5-flash`
 - `gemini-embedding-001`
 
 ### RAG
+
 - LangChain
 - FAISS
 - Recursive Character Text Splitter
+- Vector Embeddings
+- Semantic Search
 
 ### YouTube
+
 - YouTube Transcript API
 
 ### Frontend
+
 - HTML
 - CSS
 - JavaScript
@@ -51,7 +69,7 @@ The application fetches a YouTube video's transcript, converts it into searchabl
 
 ## 🧠 How It Works
 
-The project follows a **Retrieval-Augmented Generation (RAG)** architecture.
+The application follows a **Retrieval-Augmented Generation (RAG)** architecture.
 
 ```text
 YouTube URL
@@ -72,12 +90,28 @@ Similarity Search
      ↓
 Retrieve Relevant Transcript Chunks
      ↓
-Send Context + Question to Gemini
+Send Retrieved Context + Question to Gemini
      ↓
 Generate Answer
      ↓
 Display Answer
 ```
+
+### RAG Pipeline
+
+The project follows three main stages:
+
+**1. Retrieval**
+
+Relevant transcript chunks are retrieved from the FAISS vector store based on the user's question.
+
+**2. Augmentation**
+
+The retrieved transcript chunks are added as context along with the user's question.
+
+**3. Generation**
+
+Gemini 2.5 Flash uses the retrieved context to generate the final answer.
 
 ---
 
@@ -93,6 +127,11 @@ youtube-video-qa/
 │   ├── style.css
 │   └── script.js
 │
+├── images/
+│   ├── home1.png
+│   ├── home2.png
+│   └── home3.png
+│
 ├── .env
 ├── .gitignore
 ├── requirements.txt
@@ -103,17 +142,17 @@ youtube-video-qa/
 
 ## ⚙️ Installation
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/youtube-video-qa.git
+git clone https://github.com/YOUR_USERNAME/youtube-video-qa.git
 ```
 
 ```bash
 cd youtube-video-qa
 ```
 
-### 2. Create a virtual environment
+### 2. Create a Virtual Environment
 
 ```bash
 python -m venv venv
@@ -125,9 +164,7 @@ Activate it on Windows:
 venv\Scripts\activate
 ```
 
----
-
-### 3. Install dependencies
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -153,7 +190,7 @@ load_dotenv()
 
 **Never upload your API key to GitHub.**
 
-Add `.env` to `.gitignore`:
+Add the following to `.gitignore`:
 
 ```text
 .env
@@ -209,17 +246,29 @@ The application retrieves the relevant parts of the transcript and uses Gemini t
 
 ---
 
+## 📸 Screenshots
+
+### 🎥 Video Loaded
+
+![Video Loaded](images/home2.png)
+
+### 🤖 Question Answering
+
+![Question Answering](images/home3.png)
+
+---
+
 ## 🔍 RAG Implementation
 
-The project uses the following RAG pipeline:
+The application implements RAG using the following steps:
 
 ### 1. Document Loading
 
-The YouTube Transcript API fetches the transcript.
+The **YouTube Transcript API** fetches the transcript of the selected video.
 
 ### 2. Text Splitting
 
-The transcript is divided into chunks using:
+The transcript is divided into smaller chunks using:
 
 ```python
 RecursiveCharacterTextSplitter(
@@ -228,9 +277,11 @@ RecursiveCharacterTextSplitter(
 )
 ```
 
+This makes the transcript easier to process and retrieve efficiently.
+
 ### 3. Embeddings
 
-Gemini generates vector representations of the transcript chunks:
+Each transcript chunk is converted into a vector representation using Gemini embeddings:
 
 ```python
 GoogleGenerativeAIEmbeddings(
@@ -240,15 +291,19 @@ GoogleGenerativeAIEmbeddings(
 
 ### 4. Vector Database
 
-FAISS stores the embeddings and performs similarity search.
+The generated embeddings are stored in **FAISS**, which allows efficient similarity searching.
 
 ### 5. Retrieval
 
-When the user asks a question, the retriever finds the most relevant transcript chunks.
+When the user asks a question, the application performs a similarity search and retrieves the most relevant transcript chunks.
 
-### 6. Generation
+### 6. Augmentation
 
-Gemini 2.5 Flash receives the retrieved context and question and generates the final answer.
+The retrieved transcript content is combined with the user's question and passed to the language model as context.
+
+### 7. Generation
+
+**Gemini 2.5 Flash** uses the retrieved context to generate the final answer.
 
 ---
 
@@ -306,9 +361,9 @@ Response:
 
 ## 🎯 Project Goal
 
-The main goal of this project is to make long YouTube videos easier to understand by allowing users to interact with the video's transcript using natural language.
+The goal of this project is to make long YouTube videos easier to understand by allowing users to interact with the video's transcript using natural language.
 
-Instead of manually watching the entire video to find specific information, users can ask questions and retrieve relevant information directly.
+Instead of manually searching through a long video to find specific information, users can ask questions and retrieve relevant information through a **RAG-based question-answering system**.
 
 ---
 
@@ -317,7 +372,7 @@ Instead of manually watching the entire video to find specific information, user
 Through this project, I worked with:
 
 - Retrieval-Augmented Generation (RAG)
-- Large Language Models
+- Large Language Models (LLMs)
 - Vector Embeddings
 - Vector Databases
 - Semantic Search
@@ -328,18 +383,18 @@ Through this project, I worked with:
 - Flask REST APIs
 - Prompt Engineering
 - LCEL / LangChain Runnables
-- Frontend ↔ Backend communication
+- Frontend ↔ Backend Communication
 
 ---
 
 ## 🔮 Future Improvements
 
 - 🎙️ Support videos without transcripts using speech-to-text
-- 🌍 Better multilingual transcript selection
+- 🌍 Improve multilingual transcript selection
 - 💾 Save previously processed videos
-- 📌 Timestamp-based answers
+- 📌 Add timestamp-based answers
 - 📄 Export answers as PDF
-- 🧠 Conversation memory
+- 🧠 Add conversation memory
 - 📊 Show relevant transcript sources
 - 🎥 Jump directly to the relevant part of the YouTube video
 - 🚀 Deploy the application online
