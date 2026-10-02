@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>YouTube RAG Assistant</title>
+
+    <link rel="stylesheet"
+          href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Header -->
+        <header class="header">
+
+            <div class="logo">
+                <div class="logo-icon">▶</div>
+
+                <div>
+                    <h1>YouTube RAG</h1>
+                    <p>AI Video Assistant</p>
+                </div>
+            </div>
+
+            <div class="status">
+                <span class="status-dot"></span>
+                AI Ready
+            </div>
+
+        </header>
+
+
+        <!-- Main -->
+        <main>
+
+            <!-- Introduction -->
+            <section class="hero">
+
+                <h2>Ask anything about a YouTube video.</h2>
+
+                <p>
+                    Paste a YouTube link, load the video,
+                    and ask questions using AI.
+                </p>
+
+            </section>
+
+
+            <!-- Video Section -->
+            <section class="card">
+
+                <div class="section-title">
+
+                    <div class="number">01</div>
+
+                    <div>
+                        <h3>Video</h3>
+                        <p>Paste your YouTube video link</p>
+                    </div>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="videoLink">
+                        YouTube URL
+                    </label>
+
+                    <div class="input-row">
+
+                        <input
+                            type="text"
+                            id="videoLink"
+                            placeholder="https://www.youtube.com/watch?v=..."
+                        >
+
+                        <button
+                            id="loadButton"
+                            onclick="loadVideo()">
+
+                            <span>Load Video</span>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="videoStatus"
+                    class="message">
+                </div>
+
+            </section>
+
+
+            <!-- Question + Answer -->
+            <section class="workspace">
+
+
+                <!-- Question -->
+                <div class="card question-card">
+
+                    <div class="section-title">
+
+                        <div class="number">02</div>
+
+                        <div>
+                            <h3>Question</h3>
+                            <p>Ask something about the video</p>
+                        </div>
+
+                    </div>
+
+
+                    <textarea
+                        id="question"
+                        placeholder="Example: What is this video about?"
+                    ></textarea>
+
+
+                    <button
+                        id="askButton"
+                        class="ask-button"
+                        onclick="askQuestion()">
+
+                        <span>Ask Question</span>
+
+                        <span class="arrow">→</span>
+
+                    </button>
+
+
+                    <div
+                        id="questionStatus"
+                        class="message">
+                    </div>
+
+                </div>
+
+
+                <!-- Answer -->
+                <div class="card answer-card">
+
+                    <div class="section-title">
+
+                        <div class="number">03</div>
+
+                        <div>
+                            <h3>Answer</h3>
+                            <p>AI generated response</p>
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="answer"
+                        class="answer">
+
+                        <div class="answer-placeholder">
+
+                            <div class="bot-icon">
+                                ✦
+                            </div>
+
+                            <p>
+                                Your answer will appear here.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
